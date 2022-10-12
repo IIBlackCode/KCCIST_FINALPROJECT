@@ -1,8 +1,10 @@
-from StockSimulator.Stock import *
+from Stock import *
 
-from tkinter.filedialog import *
-from tkinter.simpledialog import *
-from tkinter import *
+import tkinter as tk
+
+# from tk.filedialog import *
+# from tk.simpledialog import *
+from tk import *
 
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -16,7 +18,7 @@ fontPath = './NanumFontSetup_TTF_SQUARE'
 fontLight = fm.FontProperties(fname=fontPath + '/NanumSquareL.ttf', size=18)
 fontBold = fm.FontProperties(fname=fontPath + '/NanumSquareB.ttf', size=18)
 
-Simulator = Tk()
+Simulator = tk.Tk()
 figure = plt.Figure()
 pltsub = figure.add_subplot()
 canvas = None
@@ -26,8 +28,8 @@ lbTheme, lbStock, lbTerm, lbData = None, None, None, None
 mbTheme, mbStock, mbTerm, mbData = None, None, None, None
 btnSaveModel, btnSaveChart = None, None
 
-g_theme, g_stock, g_term, g_data = StringVar(), StringVar(), StringVar(), StringVar()
-g_model, g_predictDate = StringVar(), StringVar()
+g_theme, g_stock, g_term, g_data = tk.StringVar(), tk.StringVar(), tk.StringVar(), tk.StringVar()
+g_model, g_predictDate = tk.StringVar(), tk.StringVar()
 g_theme.set('테마 선택')
 g_stock.set('종목 선택')
 g_term.set('학습 기간 선택')
@@ -56,10 +58,10 @@ def radioTheme() :
     g_stock.set('종목 선택')
     g_term.set('학습 기간 선택')
     g_data.set('학습 데이터 선택')
-    mbStock['state'] = DISABLED
-    mbTerm['state'] = DISABLED
-    mbData['state'] = DISABLED
-    btnTrain['state'] = DISABLED
+    mbStock['state'] = tk.DISABLED
+    mbTerm['state'] = tk.DISABLED
+    mbData['state'] = tk.DISABLED
+    btnTrain['state'] = tk.DISABLED
 
     # 선택된 테마에 해당되는 종목을 'Total.csv'에서 찾아 종목리스트에 출력
     dfTotal = openCSV('Total')
@@ -78,13 +80,13 @@ def radioTheme() :
     elif g_theme.get() == "인공지능":
         npTheme = np.where(npTotal == "인공지능")
 
-    mbStock.menu = Menu(mbStock, tearoff=0, bg='#AFFFFF')
+    mbStock.menu = tk.Menu(mbStock, tearoff=0, bg='#AFFFFF')
     mbStock["menu"] = mbStock.menu
     for stock in npTotal[npTheme[0], 0]:
         mbStock.menu.add_radiobutton(label=stock, value=stock, variable=g_stock, command=radioStock)
 
     # 종목 선택 버튼 켜기
-    mbStock['state'] = NORMAL
+    mbStock['state'] = tk.NORMAL
 
 def radioStock() :
     global g_theme, g_stock, g_term, g_data
@@ -92,7 +94,7 @@ def radioStock() :
     global dfStock
 
     # 기간 선택 버튼 켜기
-    mbTerm['state'] = NORMAL
+    mbTerm['state'] = tk.NORMAL
 
 def radioTerm() :
     global g_theme, g_stock, g_term, g_data
@@ -110,7 +112,7 @@ def radioTerm() :
         standardDate = "2020"
 
     # 데이터 선택 버튼 켜기
-    mbData['state'] = NORMAL
+    mbData['state'] = tk.NORMAL
 
 def radioData() :
     global g_theme, g_stock, g_term, g_data
@@ -136,7 +138,7 @@ def radioData() :
         column = ['Open', 'High', 'Low', 'Close', 'Volume', '5Days', '10Days', '20Days', '60Days', '120Days', 'Escore']
 
     # 학습 실행 버튼 켜기
-    btnTrain['state'] = NORMAL
+    btnTrain['state'] = tk.NORMAL
 
 def clkTrain() :
     global g_theme, g_stock, g_term, g_data, g_predictDate, g_model
@@ -227,7 +229,7 @@ def clkTrain() :
 
     # 차트 출력
     canvas = FigureCanvasTkAgg(figure, frame4)
-    canvas.get_tk_widget().pack(side=TOP)
+    canvas.get_tk_widget().pack(side='top')
     pltsub = figure.add_subplot()
     pltsub.plot(predictVal2, label=tmpLabel + "days predict")
     pltsub.plot(predictVal1, label="last " + tmpLabel + "days predict")
@@ -293,15 +295,15 @@ if __name__ == '__main__' :
     Simulator.configure(bg='#CFFFFF')
 
     ## 데이터 설정 프레임
-    frame1 = Frame(Simulator, relief=SUNKEN, background="#CFFFFF", bd=2)
+    frame1 = tk.Frame(Simulator, relief=tk.SUNKEN, background="#CFFFFF", bd=2)
     frame1.pack(side="left", fill="both")
 
     ## 테마 선택
-    lbTheme = Label(frame1, relief='flat', bd=1, bg='#AFFFFF', textvariable=g_theme)
+    lbTheme = tk.Label(frame1, relief='flat', bd=1, bg='#AFFFFF', textvariable=g_theme)
     lbTheme.pack(side='top', fill='x', ipady=20)
-    mbTheme = Menubutton(frame1, relief='raised', bd=1, text='▼', cursor='hand2', bg='#AFFFFF')
+    mbTheme = tk.Menubutton(frame1, relief='raised', bd=1, text='▼', cursor='hand2', bg='#AFFFFF')
     mbTheme.pack(side='top', fill='x')
-    mbTheme.menu = Menu(mbTheme, tearoff=0, bg='#AFFFFF')
+    mbTheme.menu = tk.Menu(mbTheme, tearoff=0, bg='#AFFFFF')
     mbTheme["menu"] = mbTheme.menu
     mbTheme.menu.add_radiobutton(label="게임", value='게임', variable=g_theme, command=radioTheme)
     mbTheme.menu.add_radiobutton(label="겨울", value='겨울', variable=g_theme, command=radioTheme)
@@ -310,17 +312,17 @@ if __name__ == '__main__' :
     mbTheme.menu.add_radiobutton(label="항공여행", value='항공여행', variable=g_theme, command=radioTheme)
 
     ## 종목 선택
-    lbStock = Label(frame1, relief='flat', bd=1, bg='#AFFFFF', textvariable=g_stock)
+    lbStock = tk.Label(frame1, relief='flat', bd=1, bg='#AFFFFF', textvariable=g_stock)
     lbStock.pack(side='top', fill='x', ipady=20)
-    mbStock=Menubutton(frame1, relief='raised', bd=1, text='▼', cursor='hand2', bg='#AFFFFF', state=DISABLED)
+    mbStock=tk.Menubutton(frame1, relief='raised', bd=1, text='▼', cursor='hand2', bg='#AFFFFF', state=tk.DISABLED)
     mbStock.pack(side='top', fill='x')
 
     ## 학습기간 선택
-    lbTerm = Label(frame1, relief='flat', bd=1, bg='#AFFFFF', textvariable=g_term)
+    lbTerm = tk.Label(frame1, relief='flat', bd=1, bg='#AFFFFF', textvariable=g_term)
     lbTerm.pack(side='top', fill='x', ipady=20)
-    mbTerm=Menubutton(frame1, relief='raised', bd=1, text='▼', cursor='hand2', bg='#AFFFFF', state=DISABLED)
+    mbTerm=tk.Menubutton(frame1, relief='raised', bd=1, text='▼', cursor='hand2', bg='#AFFFFF', state=tk.DISABLED)
     mbTerm.pack(side='top', fill='x')
-    mbTerm.menu = Menu(mbTerm, tearoff=0, bg='#AFFFFF')
+    mbTerm.menu = tk.Menu(mbTerm, tearoff=0, bg='#AFFFFF')
     mbTerm["menu"] = mbTerm.menu
     mbTerm.menu.add_radiobutton(label="2017년 부터", value='2017년 부터', variable=g_term, command=radioTerm)
     mbTerm.menu.add_radiobutton(label="2018년 부터", value='2018년 부터', variable=g_term, command=radioTerm)
@@ -328,11 +330,11 @@ if __name__ == '__main__' :
     mbTerm.menu.add_radiobutton(label="2020년 부터", value='2020년 부터', variable=g_term, command=radioTerm)
 
     ## 학습데이터 선택
-    lbData = Label(frame1, relief='flat', bd=1, bg='#AFFFFF', textvariable=g_data)
+    lbData = tk.Label(frame1, relief='flat', bd=1, bg='#AFFFFF', textvariable=g_data)
     lbData.pack(side='top', ipadx=30, ipady=20)
-    mbData=Menubutton(frame1, relief='raised', bd=1, text='▼', cursor='hand2', bg='#AFFFFF', state=DISABLED)
+    mbData=tk.Menubutton(frame1, relief='raised', bd=1, text='▼', cursor='hand2', bg='#AFFFFF', state=tk.DISABLED)
     mbData.pack(side='top', fill='x')
-    mbData.menu = Menu(mbData, tearoff=0, bg='#AFFFFF')
+    mbData.menu = tk.Menu(mbData, tearoff=0, bg='#AFFFFF')
     mbData["menu"] = mbData.menu
     mbData.menu.add_radiobutton(label="시가, 고가, 저가, 종가", value='주가', variable=g_data, command=radioData)
     mbData.menu.add_radiobutton(label="시가, 고가, 저가, 종가, 이동평균선", value='주가 + 이평선', variable=g_data, command=radioData)
@@ -344,67 +346,67 @@ if __name__ == '__main__' :
     mbData.menu.add_radiobutton(label="시가, 고가, 저가, 종가, 거래량, 이동평균선, 뉴스", value='주가 + 거래량 + 이평선 + 뉴스', variable=g_data, command=radioData)
 
     ## 동기화 버튼
-    btnSync = Button(frame1, text='데이터 동기화', fg='black', bd=3, bg='#AFFFFF', command=syncData)
-    btnSync.pack(side=BOTTOM, fill='x', padx=10, pady=10, ipady=20)
+    btnSync = tk.Button(frame1, text='데이터 동기화', fg='black', bd=3, bg='#AFFFFF', command=syncData)
+    btnSync.pack(side=tk.BOTTOM, fill='x', padx=10, pady=10, ipady=20)
 
 
     ### 모델 설정 프레임
-    frame2 = Frame(Simulator, relief=SUNKEN, background="#CFFFFF", bd=2)
+    frame2 = tk.Frame(Simulator, relief=tk.SUNKEN, background="#CFFFFF", bd=2)
     frame2.pack(side="left", fill="both")
 
-    lbModel = Label(frame2, relief='groove', bd=1, text = '모델 선택', bg='#AFFFFF')
+    lbModel = tk.Label(frame2, relief='groove', bd=1, text = '모델 선택', bg='#AFFFFF')
     lbModel.pack(side='top', fill='x', ipadx=30, ipady=20, padx=20, pady=20)
 
-    radioModel1 = tkinter.Radiobutton(frame2, text="RNN", value="RNN", variable=g_model, bg="#CFFFFF")
+    radioModel1 = tk.Radiobutton(frame2, text="RNN", value="RNN", variable=g_model, bg="#CFFFFF")
     radioModel1.pack(side="top", ipady=20)
 
-    radioModel2 = tkinter.Radiobutton(frame2, text="LSTM", value="LSTM", variable=g_model, bg="#CFFFFF")
+    radioModel2 = tk.Radiobutton(frame2, text="LSTM", value="LSTM", variable=g_model, bg="#CFFFFF")
     radioModel2.pack(side="top", ipady=20)
 
-    radioModel3 = tkinter.Radiobutton(frame2, text="양방향 LSTM", value="양방향 LSTM", variable=g_model, bg="#CFFFFF")
+    radioModel3 = tk.Radiobutton(frame2, text="양방향 LSTM", value="양방향 LSTM", variable=g_model, bg="#CFFFFF")
     radioModel3.pack(side="top", ipady=20)
 
-    radioModel4 = tkinter.Radiobutton(frame2, text="GRU", value="GRU", variable=g_model, bg="#CFFFFF")
+    radioModel4 = tk.Radiobutton(frame2, text="GRU", value="GRU", variable=g_model, bg="#CFFFFF")
     radioModel4.pack(side="top", ipady=20)
 
 
     ### 예측 기간 설정 프레임
-    frame3 = Frame(Simulator, relief=SUNKEN, background="#CFFFFF", bd=2)
+    frame3 = tk.Frame(Simulator, relief=tk.SUNKEN, background="#CFFFFF", bd=2)
     frame3.pack(side="left", fill="both")
 
-    lbModel = Label(frame3, relief='groove', bd=1, text = '예측 기간 선택', bg='#AFFFFF')
+    lbModel = tk.Label(frame3, relief='groove', bd=1, text = '예측 기간 선택', bg='#AFFFFF')
     lbModel.pack(side='top', fill='x', ipadx=15, ipady=20, padx=20, pady=20)
 
-    radioDate1 = tkinter.Radiobutton(frame3, text="1일", value="1일", variable=g_predictDate, bg="#CFFFFF")
+    radioDate1 = tk.Radiobutton(frame3, text="1일", value="1일", variable=g_predictDate, bg="#CFFFFF")
     radioDate1.pack(side="top", ipady=20)
 
-    radioDate2 = tkinter.Radiobutton(frame3, text="5일", value="5일", variable=g_predictDate, bg="#CFFFFF")
+    radioDate2 = tk.Radiobutton(frame3, text="5일", value="5일", variable=g_predictDate, bg="#CFFFFF")
     radioDate2.pack(side="top", ipady=20)
 
-    radioDate3 = tkinter.Radiobutton(frame3, text="20일", value="20일", variable=g_predictDate, bg="#CFFFFF")
+    radioDate3 = tk.Radiobutton(frame3, text="20일", value="20일", variable=g_predictDate, bg="#CFFFFF")
     radioDate3.pack(side="top", ipady=20)
 
-    radioDate4 = tkinter.Radiobutton(frame3, text="60일", value="60일", variable=g_predictDate, bg="#CFFFFF")
+    radioDate4 = tk.Radiobutton(frame3, text="60일", value="60일", variable=g_predictDate, bg="#CFFFFF")
     radioDate4.pack(side="top", ipady=20)
 
     ## 학습 버튼
-    btnTrain = Button(frame3, text='학습 실행', fg='black', bd=3, bg='#3FFFFF', state=DISABLED, command=clkTrain)
+    btnTrain = tk.Button(frame3, text='학습 실행', fg='black', bd=3, bg='#3FFFFF', state=tk.DISABLED, command=clkTrain)
     btnTrain.pack(side='bottom', fill='x', ipady=20, padx=10, pady=10)
 
 
     ### 차트 출력 프레임
-    frame4 = Frame(Simulator, relief=SUNKEN, background="#CFFFFF", bd=2)
+    frame4 = tk.Frame(Simulator, relief=tk.SUNKEN, background="#CFFFFF", bd=2)
     frame4.pack(side="left", fill="both")
 
     # 차트 출력
     canvas = FigureCanvasTkAgg(figure, frame4)
-    canvas.get_tk_widget().pack(side=TOP)
+    canvas.get_tk_widget().pack(side='top')
 
     ## 저장 버튼
-    btnSaveModel = Button(frame4, text='모델 저장', fg='black', bd=3, bg='#3FFFFF', state=DISABLED)
+    btnSaveModel = tk.Button(frame4, text='모델 저장', fg='black', bd=3, bg='#3FFFFF', state=tk.DISABLED)
     btnSaveModel.pack(side='right', ipadx=20, ipady=10, padx=10)
 
-    btnSaveChart = Button(frame4, text='차트 저장', fg='black', bd=3, bg='#3FFFFF', state=DISABLED)
+    btnSaveChart = tk.Button(frame4, text='차트 저장', fg='black', bd=3, bg='#3FFFFF', state=tk.DISABLED)
     btnSaveChart.pack(side='right', ipadx=20, ipady=10)
 
     Simulator.mainloop()
