@@ -1,5 +1,20 @@
 # 대한상공회의소 딥러닝 기반의 주가 예측 서비스
 
+## SETTING
+### 가상환경 생성
+    python -m venv venv
+
+### 라이브러리 설치
+    pip install django
+    pip install djangorestframework
+    pip install pandas
+    pip install matplotlib
+    pip install tensorflow
+    pip install eunjeon
+
+### eunjeon 라이브러리 설치 안될 때
+![슬라이드0001](https://user-images.githubusercontent.com/46194003/eunjeon.jpg)
+
 5조 세.나.주 - 세상에 나쁜 주식은 없다.
 
 대한상공회의소 프로젝트 경연대회 대상 수상작
