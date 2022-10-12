@@ -5,7 +5,7 @@ import urllib
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, Http404
 from django.views.generic import View
-from rest_framework.views import APIView
+
 from django.template import loader
 from datetime import datetime
 import random
